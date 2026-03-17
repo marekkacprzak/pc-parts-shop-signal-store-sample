@@ -1,0 +1,52 @@
+@let p = product();
+@let discountedPrice = p.price * 0.9;
+
+<article class="card" [routerLink]="['/product', p.id]">
+  <div class="card-image">
+    <img [src]="p.imageUrl" [alt]="p.name" loading="lazy" />
+    <div class="card-badge">
+      @switch (p.category) {
+        @case ('cpu') { <span class="badge cpu">CPU</span> }
+        @case ('gpu') { <span class="badge gpu">GPU</span> }
+        @case ('ram') { <span class="badge ram">RAM</span> }
+        @case ('ssd') { <span class="badge ssd">SSD</span> }
+        @case ('motherboard') { <span class="badge mb">Board</span> }
+        @case ('psu') { <span class="badge psu">PSU</span> }
+        @case ('case') { <span class="badge case">Case</span> }
+        @case ('cooler') { <span class="badge cooler">Cooler</span> }
+        @default { <span class="badge">{{ p.category }}</span> }
+      }
+    </div>
+  </div>
+
+  <div class="card-body">
+    <span class="brand">{{ p.brand }}</span>
+    <h3 class="name">{{ p.name }}</h3>
+
+    <div class="rating">
+      @for (star of [1, 2, 3, 4, 5]; track star) {
+        <mat-icon class="star" [class.filled]="star <= p.rating">
+          {{ star <= p.rating ? 'star' : 'star_border' }}
+        </mat-icon>
+      }
+      <span class="rating-val">{{ p.rating }}</span>
+    </div>
+
+    <div class="price-row">
+      <span class="price">{{ p.price | currency }}</span>
+      <span class="discount">{{ discountedPrice | currency }}</span>
+    </div>
+  </div>
+
+  <div class="card-footer">
+    @if (p.stock > 0) {
+      <button class="add-btn" (click)="onAddToCart($event)">
+        <mat-icon>add_shopping_cart</mat-icon>
+        Add to Cart
+      </button>
+      <span class="stock-label">{{ p.stock }} in stock</span>
+    } @else {
+      <span class="out-of-stock">Out of Stock</span>
+    }
+  </div>
+</article>

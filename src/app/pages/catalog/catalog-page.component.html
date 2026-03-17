@@ -1,0 +1,77 @@
+<div class="page">
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>The latest in PC hardware.</h1>
+    <p class="hero-sub">Browse our curated selection of components for your next build.</p>
+  </section>
+
+  <!-- Search & Filter Bar -->
+  <section class="filter-bar">
+    <div class="search-wrapper">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input
+        class="search-input"
+        [value]="filterStore.searchQuery()"
+        (input)="filterStore.setSearchQuery($any($event.target).value)"
+        placeholder="Search products..."
+      />
+    </div>
+
+    <div class="categories">
+      <mat-chip-listbox
+        [multiple]="true"
+        [value]="filterStore.selectedCategories()"
+        (change)="filterStore.setCategories($event.value)"
+      >
+        @for (cat of categories; track cat.value) {
+          <mat-chip-option [value]="cat.value">
+            <mat-icon matChipAvatar>{{ cat.icon }}</mat-icon>
+            {{ cat.label }}
+          </mat-chip-option>
+        }
+      </mat-chip-listbox>
+    </div>
+
+    @if (filterStore.hasActiveFilters()) {
+      <button class="clear-filters" (click)="filterStore.resetFilters()">
+        <mat-icon>close</mat-icon>
+        Clear filters ({{ filterStore.activeFilterCount() }})
+      </button>
+    }
+  </section>
+
+  <!-- Results -->
+  <section class="results">
+    <div class="results-meta">
+      <span class="count">{{ filteredProducts().length }} products</span>
+    </div>
+
+    @if (productsStore.isPending()) {
+      <app-loading-spinner />
+    } @else if (productsStore.error(); as error) {
+      <div class="error-state">
+        <mat-icon>wifi_off</mat-icon>
+        <h3>Unable to load products</h3>
+        <p>{{ error }}</p>
+        <button mat-flat-button (click)="productsStore.loadAll()">Try Again</button>
+      </div>
+    } @else {
+      @defer (on viewport) {
+        <app-product-grid
+          [products]="filteredProducts()"
+          (addToCart)="onAddToCart($event)"
+        />
+      } @placeholder {
+        <div class="placeholder-grid">
+          @for (i of [1,2,3,4,5,6]; track i) {
+            <div class="placeholder-card"></div>
+          }
+        </div>
+      } @loading (minimum 300ms) {
+        <app-loading-spinner />
+      } @error {
+        <p class="error-text">Failed to load product grid.</p>
+      }
+    }
+  </section>
+</div>

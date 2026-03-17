@@ -1,0 +1,58 @@
+.page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 80px var(--page-padding);
+}
+
+.confirmation {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon-ring {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(48, 209, 88, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+
+  mat-icon {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+    color: var(--accent-green);
+  }
+}
+
+h1 {
+  margin: 0;
+}
+
+.message {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.order-id {
+  font-family: 'SF Mono', ui-monospace, monospace;
+  font-size: 0.9rem;
+  color: var(--text-tertiary);
+  background: var(--surface-card);
+  padding: 8px 20px;
+  border-radius: 980px;
+  border: 1px solid var(--border-subtle);
+  margin: 8px 0;
+}
+
+.continue-link {
+  color: var(--accent-blue);
+  font-size: 1rem;
+  margin-top: 8px;
+}

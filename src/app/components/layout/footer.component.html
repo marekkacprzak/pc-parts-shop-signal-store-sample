@@ -1,0 +1,28 @@
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <a routerLink="/catalog">All Products</a>
+        <a routerLink="/compare">Compare</a>
+      </div>
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <a routerLink="/catalog" [queryParams]="{ category: 'cpu' }">CPUs</a>
+        <a routerLink="/catalog" [queryParams]="{ category: 'gpu' }">Graphics Cards</a>
+        <a routerLink="/catalog" [queryParams]="{ category: 'ram' }">Memory</a>
+        <a routerLink="/catalog" [queryParams]="{ category: 'ssd' }">Storage</a>
+      </div>
+      <div class="footer-col">
+        <h4>Built With</h4>
+        <span>Angular v21</span>
+        <span>Signals & Signal Forms</span>
+        <span>NgRx Signal Store</span>
+        <span>Angular Material</span>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>PC Parts Shop &mdash; Angular v21 Educational Project</p>
+    </div>
+  </div>
+</footer>

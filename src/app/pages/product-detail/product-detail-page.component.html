@@ -1,0 +1,99 @@
+@if (productResource.isLoading()) {
+  <app-loading-spinner />
+} @else if (productResource.hasValue()) {
+  @let product = productResource.value();
+  <div class="page">
+    <a class="back-link" routerLink="/catalog">
+      <mat-icon>arrow_back_ios</mat-icon>
+      <span>Catalog</span>
+    </a>
+
+    <div class="product-layout">
+      <div class="media-col" #imageSection>
+        <div class="image-wrapper">
+          <img [src]="selectedImage()" [alt]="product.name" class="hero-image" />
+        </div>
+      </div>
+
+      <div class="info-col">
+        <span class="category-label">{{ product.category | uppercase }}</span>
+        <h1>{{ product.name }}</h1>
+        <p class="brand">{{ product.brand }}</p>
+
+        <div class="rating-row">
+          @for (star of [1, 2, 3, 4, 5]; track star) {
+            <mat-icon class="star" [class.filled]="star <= product.rating">
+              {{ star <= product.rating ? 'star' : 'star_border' }}
+            </mat-icon>
+          }
+          <span class="rating-text">{{ product.rating }} / 5</span>
+        </div>
+
+        <p class="description">{{ product.description }}</p>
+
+        <div class="purchase-section">
+          <div class="price-display">
+            <span class="price">{{ product.price | currency }}</span>
+          </div>
+
+          <div class="quantity-row">
+            <div class="qty-control">
+              <button class="qty-btn" (click)="decrementQty()" [disabled]="selectedQuantity() <= 1">
+                <mat-icon>remove</mat-icon>
+              </button>
+              <span class="qty-value">{{ selectedQuantity() }}</span>
+              <button class="qty-btn" (click)="incrementQty()" [disabled]="selectedQuantity() >= product.stock">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+            <span class="total-label">Total: <strong>{{ totalPrice() | currency }}</strong></span>
+          </div>
+
+          @if (product.stock > 0) {
+            <button class="buy-btn" (click)="addToCart()">
+              <mat-icon>shopping_bag</mat-icon>
+              Add {{ selectedQuantity() }} to Bag
+            </button>
+            <span class="stock-info">
+              <mat-icon>check_circle</mat-icon>
+              {{ product.stock }} in stock
+            </span>
+          } @else {
+            <div class="oos-banner">
+              <mat-icon>error_outline</mat-icon>
+              Currently unavailable
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Specs -->
+    <section class="specs-section">
+      <h2>Technical Specifications</h2>
+      @defer (on interaction) {
+        <div class="specs-grid">
+          @for (entry of specEntries(); track entry[0]) {
+            <div class="spec-item">
+              <span class="spec-label">{{ entry[0] }}</span>
+              <span class="spec-value">{{ entry[1] }}</span>
+            </div>
+          }
+        </div>
+      } @placeholder {
+        <button class="show-specs-btn">
+          <mat-icon>expand_more</mat-icon>
+          View all specifications
+        </button>
+      } @loading (minimum 200ms) {
+        <app-loading-spinner />
+      }
+    </section>
+  </div>
+} @else if (productResource.error(); as error) {
+  <div class="error-state">
+    <mat-icon>error_outline</mat-icon>
+    <h2>Product not found</h2>
+    <a class="back-link-btn" routerLink="/catalog">Back to Catalog</a>
+  </div>
+}

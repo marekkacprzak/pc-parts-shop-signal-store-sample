@@ -1,0 +1,115 @@
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme(
+    (
+      color: (
+        theme-type: dark,
+        primary: mat.$azure-palette,
+        tertiary: mat.$violet-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
+
+:root {
+  --page-max-width: 1280px;
+  --page-padding: clamp(20px, 4vw, 80px);
+  --surface-glass: rgba(255, 255, 255, 0.04);
+  --surface-card: rgba(255, 255, 255, 0.06);
+  --surface-card-hover: rgba(255, 255, 255, 0.10);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-medium: rgba(255, 255, 255, 0.12);
+  --text-primary: rgba(255, 255, 255, 0.92);
+  --text-secondary: rgba(255, 255, 255, 0.55);
+  --text-tertiary: rgba(255, 255, 255, 0.35);
+  --accent-blue: #2997ff;
+  --accent-green: #30d158;
+  --accent-orange: #ff9f0a;
+  --accent-red: #ff453a;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  margin: 0;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
+    'Helvetica Neue', Roboto, Arial, sans-serif;
+  background-color: #000;
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+}
+
+a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin: 0 0 8px;
+}
+
+h2 {
+  font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+}
+
+h3 {
+  font-size: 1.1rem;
+}
+
+::selection {
+  background: rgba(41, 151, 255, 0.3);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+}
+
+// Override Angular Material card defaults for our premium look
+.mat-mdc-card {
+  --mdc-elevated-card-container-color: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md) !important;
+}
+
+.mat-mdc-chip.mat-mdc-chip-highlighted {
+  --mdc-chip-elevated-container-color: rgba(41, 151, 255, 0.15);
+  --mdc-chip-label-text-color: var(--accent-blue);
+}
+
+.mdc-text-field--outlined {
+  --mdc-outlined-text-field-outline-color: var(--border-medium);
+}

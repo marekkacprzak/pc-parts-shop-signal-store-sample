@@ -1,0 +1,26 @@
+<header>
+  <nav class="header-inner">
+    <a class="logo" routerLink="/catalog">
+      <mat-icon class="logo-icon">memory</mat-icon>
+      <span class="logo-text">PC Parts</span>
+    </a>
+
+    <div class="nav-links">
+      <a routerLink="/catalog" routerLinkActive="active" class="nav-link">Store</a>
+      <a routerLink="/compare" routerLinkActive="active" class="nav-link">Compare</a>
+    </div>
+
+    <div class="nav-actions">
+      <a routerLink="/cart" class="cart-link">
+        <mat-icon
+          [matBadge]="cartBadge()"
+          [matBadgeHidden]="cartStore.isEmpty()"
+          matBadgeColor="warn"
+          [matBadgeOverlap]="false"
+        >
+          shopping_bag
+        </mat-icon>
+      </a>
+    </div>
+  </nav>
+</header>

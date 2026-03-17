@@ -1,0 +1,27 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80px 24px;
+
+  mat-icon {
+    font-size: 56px;
+    width: 56px;
+    height: 56px;
+    color: var(--text-tertiary);
+  }
+
+  h3 {
+    margin: 16px 0 8px;
+    color: var(--text-primary);
+  }
+
+  p {
+    color: var(--text-tertiary);
+    font-size: 0.9rem;
+  }
+}

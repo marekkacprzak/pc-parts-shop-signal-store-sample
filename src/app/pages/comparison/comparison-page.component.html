@@ -1,0 +1,89 @@
+<div class="page">
+  <h1>Compare.</h1>
+  <p class="subtitle">Select up to 4 products to compare side by side.</p>
+
+  <div class="selector">
+    <mat-chip-listbox multiple>
+      @for (product of productsStore.entities(); track product.id) {
+        <mat-chip-option
+          [selected]="isSelected(product.id)"
+          (selectionChange)="toggleProduct(product)"
+          [disabled]="!isSelected(product.id) && selectedProducts().length >= 4"
+        >
+          {{ product.name }}
+        </mat-chip-option>
+      }
+    </mat-chip-listbox>
+  </div>
+
+  @if (selectedProducts().length >= 2) {
+    <div class="table-wrapper">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th class="label-col"></th>
+            @for (product of selectedProducts(); track product.id) {
+              <th>
+                <div class="col-header">
+                  <img [src]="product.imageUrl" [alt]="product.name" class="col-thumb" />
+                  <span class="col-name">{{ product.name }}</span>
+                  <button class="col-remove" (click)="removeProduct(product.id)">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+              </th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-label">Price</td>
+            @for (product of selectedProducts(); track product.id) {
+              <td class="value-cell price-cell">{{ product.price | currency }}</td>
+            }
+          </tr>
+          <tr>
+            <td class="row-label">Brand</td>
+            @for (product of selectedProducts(); track product.id) {
+              <td class="value-cell">{{ product.brand }}</td>
+            }
+          </tr>
+          <tr>
+            <td class="row-label">Rating</td>
+            @for (product of selectedProducts(); track product.id) {
+              <td class="value-cell">{{ product.rating }} / 5</td>
+            }
+          </tr>
+          <tr>
+            <td class="row-label">Stock</td>
+            @for (product of selectedProducts(); track product.id) {
+              <td class="value-cell">{{ product.stock }}</td>
+            }
+          </tr>
+          @for (specKey of allSpecKeys(); track specKey) {
+            <tr>
+              <td class="row-label">{{ specKey }}</td>
+              @for (product of selectedProducts(); track product.id) {
+                <td class="value-cell">{{ product.specs[specKey] || '—' }}</td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="add-actions">
+      @for (product of selectedProducts(); track product.id) {
+        <button class="add-btn" (click)="cartStore.addItem(product)">
+          <mat-icon>add_shopping_cart</mat-icon>
+          {{ product.name }}
+        </button>
+      }
+    </div>
+  } @else {
+    <div class="hint">
+      <mat-icon>compare_arrows</mat-icon>
+      <p>Pick at least 2 products above to start comparing.</p>
+    </div>
+  }
+</div>

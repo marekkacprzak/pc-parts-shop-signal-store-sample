@@ -1,0 +1,67 @@
+<div class="page">
+  <h1>Your Bag.</h1>
+
+  @if (cartStore.isEmpty()) {
+    <div class="empty">
+      <mat-icon>shopping_bag</mat-icon>
+      <h3>Your bag is empty</h3>
+      <p>Looks like you haven't added anything yet.</p>
+      <a class="cta-link" routerLink="/catalog">Continue Shopping</a>
+    </div>
+  } @else {
+    <div class="cart-layout">
+      <div class="items-col">
+        @for (item of cartStore.entities(); track item.id) {
+          <div class="cart-row">
+            <img [src]="item.imageUrl" [alt]="item.name" class="item-thumb" />
+            <div class="item-details">
+              <a class="item-name" [routerLink]="['/product', item.productId]">{{ item.name }}</a>
+              <span class="item-unit-price">{{ item.price | currency }} each</span>
+            </div>
+            <div class="qty-control">
+              <button class="qty-btn" (click)="cartStore.updateQuantity(item.id, item.quantity - 1)">
+                <mat-icon>remove</mat-icon>
+              </button>
+              <span class="qty-val">{{ item.quantity }}</span>
+              <button class="qty-btn" (click)="cartStore.updateQuantity(item.id, item.quantity + 1)">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+            <span class="item-total">{{ item.price * item.quantity | currency }}</span>
+            <button class="remove-btn" (click)="cartStore.removeItem(item.id)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+
+      <aside class="summary-col">
+        <div class="summary-card">
+          <h3>Summary</h3>
+          <div class="summary-line">
+            <span>Subtotal ({{ cartStore.totalItems() }} items)</span>
+            <span>{{ cartStore.totalPrice() | currency }}</span>
+          </div>
+          <div class="summary-line">
+            <span>Shipping</span>
+            <span class="free-shipping">
+              {{ cartStore.totalPrice() > 500 ? 'FREE' : ('$9.99') }}
+            </span>
+          </div>
+          <div class="summary-divider"></div>
+          @let total = cartStore.totalPrice() + (cartStore.totalPrice() > 500 ? 0 : 9.99);
+          <div class="summary-line total">
+            <span>Total</span>
+            <span>{{ total | currency }}</span>
+          </div>
+          <a class="checkout-btn" routerLink="/checkout">
+            Check Out
+          </a>
+          <button class="clear-btn" (click)="cartStore.clearCart()">
+            Remove all items
+          </button>
+        </div>
+      </aside>
+    </div>
+  }
+</div>

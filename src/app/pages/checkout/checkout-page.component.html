@@ -1,0 +1,169 @@
+@if (cartStore.isEmpty()) {
+  <div class="page">
+    <div class="empty">
+      <mat-icon>shopping_bag</mat-icon>
+      <h3>Nothing to check out</h3>
+      <p>Add some products to your bag first.</p>
+      <a class="cta-link" routerLink="/catalog">Browse Products</a>
+    </div>
+  </div>
+} @else {
+  <div class="page">
+    <h1>Checkout.</h1>
+
+    <form (submit)="onSubmit($event)">
+      <mat-stepper linear #stepper class="stepper">
+        <mat-step>
+          <ng-template matStepLabel>Personal Info</ng-template>
+          <div class="step-content">
+            <div class="form-grid">
+              <div class="field-group">
+                <mat-form-field appearance="outline">
+                  <mat-label>First Name</mat-label>
+                  <input matInput [formField]="checkoutForm.firstName" />
+                </mat-form-field>
+                @if (checkoutForm.firstName().touched() && checkoutForm.firstName().invalid()) {
+                  @for (error of checkoutForm.firstName().errors(); track error) {
+                    <span class="field-error">{{ error.message }}</span>
+                  }
+                }
+              </div>
+
+              <div class="field-group">
+                <mat-form-field appearance="outline">
+                  <mat-label>Last Name</mat-label>
+                  <input matInput [formField]="checkoutForm.lastName" />
+                </mat-form-field>
+                @if (checkoutForm.lastName().touched() && checkoutForm.lastName().invalid()) {
+                  @for (error of checkoutForm.lastName().errors(); track error) {
+                    <span class="field-error">{{ error.message }}</span>
+                  }
+                }
+              </div>
+
+              <div class="field-group full">
+                <mat-form-field appearance="outline">
+                  <mat-label>Email</mat-label>
+                  <input matInput type="email" [formField]="checkoutForm.email" />
+                </mat-form-field>
+                @if (checkoutForm.email().touched() && checkoutForm.email().invalid()) {
+                  @for (error of checkoutForm.email().errors(); track error) {
+                    <span class="field-error">{{ error.message }}</span>
+                  }
+                }
+              </div>
+
+              <div class="field-group full">
+                <mat-form-field appearance="outline">
+                  <mat-label>Phone</mat-label>
+                  <input matInput type="tel" [formField]="checkoutForm.phone" />
+                </mat-form-field>
+                @if (checkoutForm.phone().touched() && checkoutForm.phone().invalid()) {
+                  @for (error of checkoutForm.phone().errors(); track error) {
+                    <span class="field-error">{{ error.message }}</span>
+                  }
+                }
+              </div>
+            </div>
+            <div class="step-nav">
+              <button class="btn-primary" matStepperNext type="button">Continue</button>
+            </div>
+          </div>
+        </mat-step>
+
+        <mat-step>
+          <ng-template matStepLabel>Shipping</ng-template>
+          <div class="step-content">
+            <div class="form-grid">
+              <div class="field-group full">
+                <mat-form-field appearance="outline">
+                  <mat-label>Address</mat-label>
+                  <input matInput [formField]="checkoutForm.address" />
+                </mat-form-field>
+                @if (checkoutForm.address().touched() && checkoutForm.address().invalid()) {
+                  @for (error of checkoutForm.address().errors(); track error) {
+                    <span class="field-error">{{ error.message }}</span>
+                  }
+                }
+              </div>
+
+              <div class="field-group">
+                <mat-form-field appearance="outline">
+                  <mat-label>City</mat-label>
+                  <input matInput [formField]="checkoutForm.city" />
+                </mat-form-field>
+                @if (checkoutForm.city().touched() && checkoutForm.city().invalid()) {
+                  @for (error of checkoutForm.city().errors(); track error) {
+                    <span class="field-error">{{ error.message }}</span>
+                  }
+                }
+              </div>
+
+              <div class="field-group">
+                <mat-form-field appearance="outline">
+                  <mat-label>Zip Code</mat-label>
+                  <input matInput [formField]="checkoutForm.zipCode" />
+                </mat-form-field>
+                @if (checkoutForm.zipCode().touched() && checkoutForm.zipCode().invalid()) {
+                  @for (error of checkoutForm.zipCode().errors(); track error) {
+                    <span class="field-error">{{ error.message }}</span>
+                  }
+                }
+              </div>
+            </div>
+            <div class="step-nav">
+              <button class="btn-ghost" matStepperPrevious type="button">Back</button>
+              <button class="btn-primary" matStepperNext type="button">Continue</button>
+            </div>
+          </div>
+        </mat-step>
+
+        <mat-step>
+          <ng-template matStepLabel>Review</ng-template>
+          <div class="step-content">
+            <div class="review-card">
+              <h3>Order Summary</h3>
+              @for (item of cartStore.entities(); track item.id) {
+                <div class="review-line">
+                  <span>{{ item.name }} <span class="qty-label">x{{ item.quantity }}</span></span>
+                  <span>{{ item.price * item.quantity | currency }}</span>
+                </div>
+              }
+              <div class="review-divider"></div>
+              <div class="review-line">
+                <span>Subtotal</span>
+                <span>{{ cartStore.totalPrice() | currency }}</span>
+              </div>
+              <div class="review-line">
+                <span>Shipping</span>
+                <span class="green">{{ shippingCost() === 0 ? 'FREE' : (shippingCost() | currency) }}</span>
+              </div>
+              <div class="review-line total">
+                <span>Total</span>
+                <span>{{ cartStore.totalPrice() + shippingCost() | currency }}</span>
+              </div>
+            </div>
+
+            <div class="review-card">
+              <h3>Shipping to</h3>
+              <p class="address-text">
+                {{ checkoutModel().firstName }} {{ checkoutModel().lastName }}<br />
+                {{ checkoutModel().address }}<br />
+                {{ checkoutModel().city }}, {{ checkoutModel().zipCode }}<br />
+                {{ checkoutModel().email }}
+              </p>
+            </div>
+
+            <div class="step-nav">
+              <button class="btn-ghost" matStepperPrevious type="button">Back</button>
+              <button class="btn-primary" type="submit" [disabled]="!isFormValid()">
+                <mat-icon>lock</mat-icon>
+                Place Order
+              </button>
+            </div>
+          </div>
+        </mat-step>
+      </mat-stepper>
+    </form>
+  </div>
+}

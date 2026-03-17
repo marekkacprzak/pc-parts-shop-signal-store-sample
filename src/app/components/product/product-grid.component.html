@@ -1,0 +1,13 @@
+@if (products().length > 0) {
+  <div class="grid">
+    @for (product of products(); track product.id) {
+      <app-product-card [product]="product" (addToCart)="addToCart.emit($event)" />
+    }
+  </div>
+} @else {
+  <div class="empty-state">
+    <mat-icon>search_off</mat-icon>
+    <h3>No products found</h3>
+    <p>Try adjusting your filters or search terms.</p>
+  </div>
+}
